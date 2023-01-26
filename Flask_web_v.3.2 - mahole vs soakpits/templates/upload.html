@@ -1,0 +1,92 @@
+<!doctype html>
+<head>
+	<title>Manhole vs SoakPits Classification</title>
+	<!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<!-- Bootstrap CSS CDN  -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+	<!-- Sweetalert CSS CDN  -->
+	<link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.min.css'>
+
+</head>
+<body>
+	
+
+	<h1 class="h1">Select multiple images to upload and Analyze</h1>
+	<!-- <img src="static\uploads\3.jpg" alt=""> -->
+	<p>
+		{% with messages = get_flashed_messages() %}
+		{% if messages %}
+			<ul class=flashes>
+			{% for message in messages %}
+			<li>{{ message }}</li>
+			{% endfor %}
+			</ul>
+		{% endif %}
+		{% endwith %}
+	</p>
+
+	<form method="post" action="/" enctype="multipart/form-data">
+		<div class="form-group">
+			<input type="file" name="files[]" multiple="true" autocomplete="off" required>
+		</div>
+		<input class="btn btn-primary" type="submit" value="Submit">
+	</form>
+
+    <br>
+	<div>
+		{% if filenames %}
+			<table class="table">
+				<thead class="thead-dark">
+					<tr>
+						<th scope="col">#</th>
+						<th scope="col">Image</th>
+						<th scope="col">Division</th>
+					</tr>
+				</thead>
+				{% for i in range(0,len_) %}
+					<tr>
+						<th scope="row">{{i}}</th>
+						<td>
+							<img style="height: 200px;width: 200px;" src="{{filenames[i]}}">
+						</td>						
+						<td>
+							<button class={{i}} style="display: block;" >Analyze</button>
+							<p id={{i}} style="display: none;">Class : {{output[i]}} <br> Confidence : {{prob[i]}}</p>
+							
+						</td>
+					</tr>
+				{% endfor %}
+			</table>
+		{% endif %}
+	</div>
+	<!-- jquery CDN  -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous">
+	</script>
+	<!-- Sweet Alert JS CDN  -->
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.all.min.js"></script>
+	<!-- Bootstrap JS CDN  -->
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+	<script>
+		$('button').click(function(){
+			var className = $(this).attr("class");
+			var para = document.getElementById(className)
+			console.log(para)
+			para.style = "display:block"
+			var str = para.innerHTML;
+			var str_pos = str.indexOf("Error");
+			if (str_pos > -1) {
+				Swal.fire("Error! \n Image is not check dam or farm pond",para.innerHTML , "error");
+			}
+			else{
+				Swal.fire("Result!",para.innerHTML , "info");
+			}
+			$(this).css("display","none");
+
+		})
+	</script>
+</body>	
